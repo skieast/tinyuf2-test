@@ -28,7 +28,7 @@
 #define APP_REQUEST_UF2_RESET_HINT   0x11F2
 
 // Initial delay in milliseconds to detect user interaction to enter UF2.
-#define UF2_DETECTION_DELAY_MS       500
+#define UF2_DETECTION_DELAY_MS       1000
 
 //--------------------------------------------------------------------+
 //
@@ -290,6 +290,13 @@ static void board_led_on(void)
   gpio_ll_set_level(&GPIO, PIN_NEOPIXEL, 0);
   #endif
 
+  #ifdef PIN_LED
+  gpio_pad_select_gpio(PIN_LED);
+  gpio_ll_input_disable(&GPIO, PIN_LED);
+  gpio_ll_output_enable(&GPIO, PIN_LED);
+  gpio_ll_set_level(&GPIO, PIN_LED, 0);
+  #endif
+
   // Need at least 200 us for initial delay although Neopixel reset time is only 50 us
   delay_cycle( ns2cycle(200000) ) ;
 
@@ -298,6 +305,11 @@ static void board_led_on(void)
   #ifdef PIN_NEOPIXEL
   board_neopixel_set(PIN_NEOPIXEL, pixels, sizeof(pixels));
   #endif
+
+  #ifdef PIN_LED
+  gpio_ll_set_level(&GPIO, PIN_LED, 1);
+  #endif
+
 }
 
 static void board_led_off(void)
@@ -312,4 +324,10 @@ static void board_led_off(void)
   // TODO how to de-select GPIO pad to set it back to default state !?
   gpio_ll_output_disable(&GPIO, PIN_NEOPIXEL);
   #endif
+
+  #ifdef PIN_LED
+  gpio_ll_set_level(&GPIO, PIN_LED, 0);
+  gpio_ll_output_disable(&GPIO, PIN_LED);
+  #endif
+
 }
