@@ -28,7 +28,7 @@
 #define APP_REQUEST_UF2_RESET_HINT   0x11F2
 
 // Initial delay in milliseconds to detect user interaction to enter UF2.
-#define UF2_DETECTION_DELAY_MS       3000
+#define UF2_DETECTION_DELAY_MS       500
 
 //--------------------------------------------------------------------+
 //
