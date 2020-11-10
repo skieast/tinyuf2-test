@@ -21,9 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-#ifndef ESPRESSIF_KALUGA_1_H_
-#define ESPRESSIF_KALUGA_1_H_
+#pragma once
 
 //--------------------------------------------------------------------+
 // Button
@@ -32,58 +30,39 @@
 // Enter UF2 mode if GPIO is pressed while 2nd stage bootloader indicator
 // is on e.g RGB = Purple. If it is GPIO0, user should not hold this while
 // reset since that will instead run the 1st stage ROM bootloader
-#define PIN_BUTTON_UF2        0
-
-// GPIO that implement 1-bit memory with RC components which hold the
-// pin value long enough for double reset detection.
-// #define PIN_DOUBLE_RESET_RC   16
+#define PIN_BUTTON_UF2       0
 
 //--------------------------------------------------------------------+
-// LED
+// TFT Display ST7789
 //--------------------------------------------------------------------+
+#undef  CONFIG_LCD_TYPE_AUTO
+#define CONFIG_LCD_TYPE_ST7789V
 
-// GPIO connected to Neopixel data
-// Note: Need to insert Jumper (default is Off) to control neopixel
-// On Kaluga this pin is also connected to Camera D3
-#define PIN_NEOPIXEL          45
+#define PIN_DISPLAY_MISO    -1              //No MISO connected to display.
+#define PIN_DISPLAY_MOSI    35
+#define PIN_DISPLAY_SCK     36
+#define PIN_DISPLAY_CS      34
+#define PIN_DISPLAY_DC      37
+#define PIN_DISPLAY_RST     38
+#define PIN_DISPLAY_BL      33
+#define PIN_POWER           14
 
-// Brightness percentage from 1 to 255
-#define NEOPIXEL_BRIGHTNESS   0x10
-
-// Number of neopixels
-#define NEOPIXEL_NUMBER       1
-
-//--------------------------------------------------------------------+
-// TFT Display
-//--------------------------------------------------------------------+
-
-#define PIN_DISPLAY_MISO       8
-#define PIN_DISPLAY_MOSI       9
-#define PIN_DISPLAY_SCK        15
-#define PIN_DISPLAY_CS         11
-#define PIN_DISPLAY_DC         13
-#define PIN_DISPLAY_RST        16
-#define PIN_DISPLAY_BL         6
-
-#define DISPLAY_BL_STATE       0  // GPIO state to enable back light
-#define DISPLAY_WIDTH          320
-#define DISPLAY_HEIGHT         240
-#define DISPLAY_MADCTL         0x08
-#define DISPLAY_ROTATION       0
-
+#define DISPLAY_BL_STATE        1  // GPIO state to enable back light
+#define DISPLAY_WIDTH           240
+#define DISPLAY_HEIGHT          135
+#define DISPLAY_MADCTL          0x36     //Display Memory Access Control ST7789
+#define DISPLAY_ROTATION        1
 //--------------------------------------------------------------------+
 // USB UF2
 //--------------------------------------------------------------------+
 
-#define USB_VID           0x239A
-#define USB_PID           0x00C7
+#define USB_VID           0x303A            // Espressif VID
+#define USB_PID           0x0002            // Default PID (not used for any production boards as this will conflict)
 #define USB_MANUFACTURER  "Espressif"
-#define USB_PRODUCT       "Kaluga 1"
+#define USB_PRODUCT       "TTGO_T8_S2_ST7789"
 
 #define UF2_PRODUCT_NAME  USB_MANUFACTURER " " USB_PRODUCT
-#define UF2_BOARD_ID      "ESP32S2-Kaluga-v1.2"
-#define UF2_VOLUME_LABEL  "KALUGA1BOOT"
-#define UF2_INDEX_URL     "https://docs.espressif.com/projects/esp-idf/en/latest/esp32s2/hw-reference/esp32s2/user-guide-esp32-s2-kaluga-1-kit.html"
+#define UF2_BOARD_ID      "LilyGO-TTGO-T8-S2-ST7789"
+#define UF2_VOLUME_LABEL  "TTGOS2BOOT"
+#define UF2_INDEX_URL     "http://www.lilygo.cn/prod_view.aspx?TypeId=50033&Id=1321&FId=t3:50033:3"
 
-
-#endif

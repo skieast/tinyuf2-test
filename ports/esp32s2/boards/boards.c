@@ -54,6 +54,10 @@ static led_strip_t *strip;
 #include "led_strip_spi_apa102.h"
 #endif
 
+#ifdef USE_DISPLAY
+#include "lcd.h"
+#endif
+
 extern int main(void);
 static void configure_pins(usb_hal_context_t *usb);
 static void _board_timer_cb(TimerHandle_t xTimer);
@@ -122,10 +126,11 @@ void board_init(void)
 #ifdef PIN_APA102_SCK
     // Setup the IO for the APA DATA and CLK
     gpio_pad_select_gpio(PIN_APA102_DATA);
-    gpio_pad_select_gpio(PIN_APA102_SCK);
     gpio_ll_input_disable(&GPIO, PIN_APA102_DATA);
-    gpio_ll_input_disable(&GPIO, PIN_APA102_SCK);
     gpio_ll_output_enable(&GPIO, PIN_APA102_DATA);
+
+    gpio_pad_select_gpio(PIN_APA102_SCK);
+    gpio_ll_input_disable(&GPIO, PIN_APA102_SCK);
     gpio_ll_output_enable(&GPIO, PIN_APA102_SCK);
 
     // Initialise SPI
@@ -133,6 +138,17 @@ void board_init(void)
 
     // Initialise the APA
     initAPA(APA102_BRIGHTNESS);
+#endif
+
+#ifdef USE_DISPLAY
+//Put anything board specific for the display here
+#endif
+
+#ifdef PIN_POWER
+    gpio_pad_select_gpio(PIN_POWER);
+    gpio_ll_input_disable(&GPIO, PIN_POWER);
+    gpio_ll_output_enable(&GPIO, PIN_POWER);
+    gpio_ll_set_level(&GPIO,PIN_POWER, 1);
 #endif
 
   timer_hdl = xTimerCreate(NULL, pdMS_TO_TICKS(1000), true, NULL, _board_timer_cb);

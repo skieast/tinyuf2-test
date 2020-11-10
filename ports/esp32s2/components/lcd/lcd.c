@@ -27,12 +27,17 @@
 
 static const char *TAG = "LCD";
 
+
 #define CONFIG_LCD_TYPE_AUTO
 
 /*!< Place data into DRAM. Constant data gets placed into DROM by default, which is not accessible by DMA. */
 DRAM_ATTR static const lcd_init_cmd_t st_init_cmds[] = {
     /* Memory Data Access Control, MX=MV=1, MY=ML=MH=0, RGB=0 */
+ #if DISPLAY_ROTATION!=1
     {0x36, {(1 << 5) | (1 << 6)}, 1},
+#elif DISPLAY_ROTATION==1
+    {0x36, {0x08}, 1},
+#endif
     /* Interface Pixel Format, 16bits/pixel for RGB/MCU interface */
     {0x3A, {0x55}, 1},
     /* Porch Setting */
@@ -176,7 +181,7 @@ static uint32_t lcd_get_id(spi_device_handle_t spi)
 
     spi_transaction_t t;
     memset(&t, 0, sizeof(t));
-    t.length = 8 * 3;
+    t.length = 8 * 4;
     t.flags = SPI_TRANS_USE_RXDATA;
     t.user = (void *)1;
 
