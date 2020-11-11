@@ -281,7 +281,7 @@ static void board_neopixel_set(uint32_t num_pin, uint8_t pixels[], uint32_t numB
 #endif
 
 #ifdef PIN_APA102_DATA
-//Bit bang out 32 bits
+//Bit bang out 8 bits
 static void SPI_write(int32_t num_pin_data,uint32_t num_pin_sck,uint8_t c) {
 
   uint8_t i;
@@ -289,19 +289,16 @@ static void SPI_write(int32_t num_pin_data,uint32_t num_pin_sck,uint8_t c) {
   {
     if (!(c&0x80)) {
       gpio_ll_set_level(&GPIO, num_pin_data, 0);
-    } else {
+    }
+    else {
       gpio_ll_set_level(&GPIO, num_pin_data, 1);
     }
     delay_cycle( ns2cycle(200000) ) ;
     gpio_ll_set_level(&GPIO, num_pin_sck, 1);
     c<<=1;
     delay_cycle( ns2cycle(200000) ) ;
-    // nop();  // Stretch clock
-    // nop();
-
     gpio_ll_set_level(&GPIO, num_pin_sck, 0);
-  delay_cycle( ns2cycle(200000) ) ;
-    // while( (ccount = esp_cpu_get_ccount()) - cyc < t_hi ) {}
+    delay_cycle( ns2cycle(200000) );
   }
 
  }
